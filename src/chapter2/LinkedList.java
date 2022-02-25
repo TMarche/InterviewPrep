@@ -3,8 +3,8 @@ package chapter2;
 import java.util.HashSet;
 
 public class LinkedList<T> {
-	private Node<T> head;
-	private Node<T> tail;
+	private Node head;
+	private Node tail;
 	
 	public LinkedList() {
 		head = null;
@@ -15,10 +15,21 @@ public class LinkedList<T> {
 	//   1. 0 nodes  (head == null; tail == null;)
 	//   2. 1 node   (head == tail)
 	//   3. 1+ nodes (head != tail)
+	public Node detectLoop() {
+		HashSet<Node> encountered = new HashSet<Node>();
+		Node current = head;
+		while (current != null) {
+			if (encountered.contains(current)) return current;
+			encountered.add(current);
+			current = current.next;
+		}
+		return null;
+	}
+	
 	public void removeDuplicates() {
 		HashSet<T> encountered = new HashSet<T>();
 		if (head == null) return;
-		Node<T> previous = head;
+		Node previous = head;
 		encountered.add(previous.data);
 		while (previous.next != null) {
 			if (encountered.contains(previous.next.data)) {
@@ -38,7 +49,7 @@ public class LinkedList<T> {
 	}
 	
 	public void insertAtHead(T data) {
-		Node<T> newNode = new Node<T>(data, null, head);
+		Node newNode = new Node(data, null, head);
 		if (head != null) {
 			newNode.setNext(head);
 			head.setPrevious(newNode);			
@@ -54,7 +65,11 @@ public class LinkedList<T> {
 	}
 	
 	public void insertAtTail(T data) {
-		Node<T> newNode = new Node<T>(data, tail, null);
+		insertAtTail(data, false);
+	}
+	
+	public void insertAtTail(T data, boolean shouldLoop) {
+		Node newNode = new Node(data, tail, shouldLoop ? head : null);
 		if (tail != null) {
 			newNode.setPrevious(tail);
 			tail.setNext(newNode);
@@ -72,7 +87,7 @@ public class LinkedList<T> {
 			return;
 		}
 		int indexOfPrevious = 0;
-		Node<T> previous = head;
+		Node previous = head;
 		if (previous == null) return;
 		while(indexOfPrevious < index - 1) {
 			indexOfPrevious++;
@@ -81,12 +96,12 @@ public class LinkedList<T> {
 		}
 		// We should have a pointer to the node prior to the
 		// one we're inserting
-		Node<T> next = previous.getNext();
+		Node next = previous.getNext();
 		if (next == null) {
 			insertAtTail(data);
 			return;
 		}
-		Node<T> newNode = new Node<T>(data, previous, next);
+		Node newNode = new Node(data, previous, next);
 		previous.setNext(newNode);
 		next.setPrevious(newNode);
 	}
@@ -96,7 +111,7 @@ public class LinkedList<T> {
 			deleteAtHead();
 			return;
 		}
-		Node<T> previous = head;
+		Node previous = head;
 		int indexOfPrevious = 0;
 		while(indexOfPrevious < index - 1) {
 			indexOfPrevious++;
@@ -105,7 +120,7 @@ public class LinkedList<T> {
 		}
 		// We should have a pointer to the node prior to the
 		// one we're deleting
-		Node<T> next = previous.getNext().getNext();
+		Node next = previous.getNext().getNext();
 		if (next == null) {
 			deleteAtTail();
 			return;
@@ -117,7 +132,7 @@ public class LinkedList<T> {
 	
 	public void deleteAtHead() {
 		if (head == null) return;
-		Node<T> next = head.getNext();
+		Node next = head.getNext();
 		if (next != null) {
 			head = next;
 			next.setPrevious(null);
@@ -130,7 +145,7 @@ public class LinkedList<T> {
 	
 	public void deleteAtTail() {
 		if (tail == null) return;
-		Node<T> previous = tail.getPrevious();
+		Node previous = tail.getPrevious();
 		if (previous != null) {
 			tail = previous;
 			previous.setNext(null);
@@ -141,17 +156,17 @@ public class LinkedList<T> {
 		}
 	}
 	
-	public Node<T> getHead() {
+	public Node getHead() {
 		return head;
 	}
 	
-	public Node<T> getTail() {
+	public Node getTail() {
 		return tail;
 	}
 	
-	public Node<T> getAt(int index) {
+	public Node getAt(int index) {
 		int currentIndex = 0;
-		Node<T> current = head;
+		Node current = head;
 		if (current == null) return null;
 		if (index == 0) return current;
 		while (currentIndex < index) {
@@ -163,30 +178,30 @@ public class LinkedList<T> {
 		return null;
 	}
 	
-	public class Node<T> {
-		private Node<T> previous;
-		private Node<T> next;
+	public class Node {
+		private Node previous;
+		private Node next;
 		private T data;
 		
-		public Node(T data, Node<T> previous, Node<T> next) {
+		public Node(T data, Node previous, Node next) {
 			this.previous = previous;
 			this.next = next;
 			this.data = data;
 		}
 
-		public Node<T> getPrevious() {
+		public Node getPrevious() {
 			return previous;
 		}
 
-		public void setPrevious(Node<T> previous) {
+		public void setPrevious(Node previous) {
 			this.previous = previous;
 		}
 
-		public Node<T> getNext() {
+		public Node getNext() {
 			return next;
 		}
 
-		public void setNext(Node<T> next) {
+		public void setNext(Node next) {
 			this.next = next;
 		}
 

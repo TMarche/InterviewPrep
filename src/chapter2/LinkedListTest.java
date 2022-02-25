@@ -147,5 +147,58 @@ class LinkedListTest {
 		assertEquals("c", list.getAt(2).getData());
 		assertEquals("c", list.getTail().getData());		
 	}
+	
+	@Test
+	void testSumLists() {
+		LinkedList<Integer> list1 = new LinkedList<Integer>();
+		LinkedList<Integer> list2 = new LinkedList<Integer>();
+		LinkedList<Integer> result;
+		result = Executor.sumLists(list1, list2);
+		assertEquals(null, result.getHead());
+		assertEquals(null, result.getTail());
+		assertEquals(null, result.getAt(0));
+		
+		// Test with null and zero
+		list1.add(0);
+		result = Executor.sumLists(list1, list2);
+		assertEquals(0, result.getHead().getData());
+		assertEquals(0, result.getTail().getData());
+		assertEquals(0, result.getAt(0).getData());
+		
+		result = Executor.sumLists(list2, list1);
+		assertEquals(0, result.getHead().getData());
+		assertEquals(0, result.getTail().getData());
+		assertEquals(0, result.getAt(0).getData());
+		
+		// Test with null and non-zero
+		list1.deleteAtHead();
+		list1.add(9);
+		list1.add(8); // list1 represents 89
+		result = Executor.sumLists(list1, list2);
+		assertEquals(9, result.getHead().getData());
+		assertEquals(8, result.getTail().getData());
+		
+		// Test with carry over into hundreds place
+		// 89 + 11 --> 100
+		list2.add(1);
+		list2.add(1);
+		result = Executor.sumLists(list1, list2);
+		assertEquals(0, result.getAt(0).getData());
+		assertEquals(0, result.getAt(1).getData());
+		assertEquals(1, result.getAt(2).getData());		
+	}
+	
+	@Test
+	void testDetectLoop() {
+		list.add("A");
+		list.add("B");
+		list.add("C");
+		assertEquals(null, list.detectLoop());
+		list.insertAtTail("D", true);
+		assertEquals("A", list.detectLoop().getData());
+		list.insertAtHead("1");
+		list.insertAtHead("2");
+		assertEquals("A", list.detectLoop().getData());
+	}
 
 }
