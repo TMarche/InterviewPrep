@@ -61,32 +61,60 @@ class StackTest {
 	
 	@Test
 	void testSortStack() {
-		assertNull(Executor.sortStack(null));
 		Stack<Integer> intStack = new Stack<Integer>();
 		intStack.push(3);
 		intStack.push(2);
 		intStack.push(1);
-		Stack<Integer> sorted = Executor.sortStack(intStack);
-		assertEquals(1, sorted.pop());
-		assertEquals(2, sorted.pop());
-		assertEquals(3, sorted.pop());
-		assertTrue(sorted.isEmpty());
+		Executor.sortStack(intStack);
+		assertEquals(1, intStack.pop());
+		assertEquals(2, intStack.pop());
+		assertEquals(3, intStack.pop());
+		assertTrue(intStack.isEmpty());
 		intStack.push(1);
 		intStack.push(2);
 		intStack.push(3);
 		intStack.push(2);
-		sorted = Executor.sortStack(intStack);
-		assertEquals(1, sorted.pop());
-		assertEquals(2, sorted.pop());
-		assertEquals(2, sorted.pop());
-		assertEquals(3, sorted.pop());
+		Executor.sortStack(intStack);
+		assertEquals(1, intStack.pop());
+		assertEquals(2, intStack.pop());
+		assertEquals(2, intStack.pop());
+		assertEquals(3, intStack.pop());
 		intStack.push(-7);
 		intStack.push(-7);
 		intStack.push(-7);
-		sorted = Executor.sortStack(intStack);
-		assertEquals(-7, sorted.pop());
-		assertEquals(-7, sorted.pop());
-		assertEquals(-7, sorted.pop());
+		Executor.sortStack(intStack);
+		assertEquals(-7, intStack.pop());
+		assertEquals(-7, intStack.pop());
+		assertEquals(-7, intStack.pop());
+	}
+	
+	@Test
+	void testSortStack2() {
+		Stack<Integer> intStack = new Stack<Integer>();
+		intStack.push(3);
+		intStack.push(2);
+		intStack.push(1);
+		Executor.sortStack2(intStack);
+		assertEquals(1, intStack.pop());
+		assertEquals(2, intStack.pop());
+		assertEquals(3, intStack.pop());
+		assertTrue(intStack.isEmpty());
+		intStack.push(1);
+		intStack.push(2);
+		intStack.push(3);
+		intStack.push(2);
+		Executor.sortStack2(intStack);
+		assertEquals(1, intStack.pop());
+		assertEquals(2, intStack.pop());
+		assertEquals(2, intStack.pop());
+		assertEquals(3, intStack.pop());
+		intStack.push(-7);
+		intStack.push(-7);
+		intStack.push(-7);
+		Executor.sortStack2(intStack);
+		assertEquals(-7, intStack.pop());
+		assertEquals(-7, intStack.pop());
+		assertEquals(-7, intStack.pop());
 	}
 
 }
