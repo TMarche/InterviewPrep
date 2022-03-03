@@ -5,9 +5,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 
-// Implementation of a graph that does not use an
-// explicit representation of edges
-// This is also an undirected graph
 /**
  * Implementation of an undirected graph that does not use
  * an exiplicit representation of edges.
