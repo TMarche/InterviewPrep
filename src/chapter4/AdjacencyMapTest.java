@@ -166,5 +166,35 @@ class AdjacencyMapTest {
 		map.removeVertex("A");
 		assertTrue(map.isEmpty());
 	}
+	
+	@Test
+	void testHasRoute() {
+		assertFalse(map.hasRoute("A", "A"));
+		map.insertVertex("A", 1);
+		map.insertVertex("B", 2);
+		map.insertVertex("C", 3);
+		assertTrue(map.hasRoute("A", "A"));
+		assertFalse(map.hasRoute("A", "B"));
+		map.insertEdge("A", "B");
+		map.insertEdge("B", "C");
+		map.insertEdge("C", "A");
+		assertTrue(map.hasRoute("A", "C"));
+		assertTrue(map.hasRoute("B", "A"));
+		assertTrue(map.hasRoute("C", "B"));
+		map.insertVertex("D", 4);
+		map.insertVertex("E", 5);
+		map.insertVertex("F", 6);
+		map.insertVertex("G", 7);
+		assertFalse(map.hasRoute("A", "G"));
+		assertFalse(map.hasRoute("G", "A"));
+		map.insertEdge("C", "D");
+		map.insertEdge("D", "E");
+		map.insertEdge("E", "F");
+		map.insertEdge("F", "G");
+		assertTrue(map.hasRoute("A", "G"));
+		assertFalse(map.hasRoute("G", "A"));
+		map.insertEdge("G", "C");
+		assertTrue(map.hasRoute("G", "A"));
+	}
 
 }

@@ -1,7 +1,11 @@
 package chapter4;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 
 /**
  * Implementation of directed graph that uses
@@ -15,6 +19,43 @@ public class AdjacencyMap<T> {
 	
 	public AdjacencyMap() {
 		nodes = new HashMap<String, Node>();
+	}
+	
+	public boolean hasRoute(String start, String end) {
+		Node startNode = nodes.get(start);
+		Node endNode = nodes.get(end);
+		if (startNode == null || endNode == null) return false;
+		if (startNode.name == endNode.name) return true;
+		
+		// Initialize queues for start and end
+		Set<String> visited = new HashSet<String>();
+		Queue<Node> startQueue = new LinkedList<Node>();
+		visited.add(startNode.name);
+		startQueue.addAll(startNode.outgoing.values());
+		Queue<Node> endQueue = new LinkedList<Node>();
+		visited.add(endNode.name);
+		endQueue.addAll(endNode.incoming.values());
+		
+		// Perform bi-directional search from start and end
+		while(!startQueue.isEmpty() || !endQueue.isEmpty()) {
+			if (!startQueue.isEmpty()) {
+				Node current = startQueue.remove();
+				if (visited.contains(current.name)) return true;
+				visited.add(current.name);
+				current.outgoing.forEach((k, v) -> {
+					if (!visited.contains(v.name)) startQueue.add(v);
+				});
+			}
+			if (!endQueue.isEmpty()) {
+				Node current = endQueue.remove();
+				if (visited.contains(current.name)) return true;
+				visited.add(current.name);
+				current.incoming.forEach((k, v) -> {
+					if (!visited.contains(v.name)) endQueue.add(v);
+				});
+			}
+		}
+		return false;
 	}
 	
 	public boolean isEmpty() {
