@@ -1,5 +1,7 @@
 package chapter4;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class BinaryTree {
@@ -49,6 +51,88 @@ public class BinaryTree {
 		if (node == null) return true;
 		if ((min != null && node.data < min) || (max != null && node.data > max)) return false;
 		return true && isValidBSTHelper(node.left, min, node.data) && isValidBSTHelper(node.right, node.data + 1, max);
+	}
+	
+	public int numPathsWithSum(int sum) {
+		return numPathsWithSum(sum, root);
+	}
+	
+	public int numPathsWithSum(int sum, Node node) {
+		if (node == null) return 0;
+		
+		return numPathsStartingAtNodeWithSum(sum, node) +
+			   numPathsWithSum(sum, node.left) +
+			   numPathsWithSum(sum, node.right);
+	}
+	
+	public int numPathsStartingAtNodeWithSum(int sum, Node node) {
+		return numPathsStartingAtNodeWithSumHelper(sum, node, 0);
+	}
+	
+	public int numPathsStartingAtNodeWithSumHelper(int sum, Node node, int currentSum) {
+		if (node == null) return 0;
+		
+		currentSum += node.data;
+		return (currentSum == sum ? 1 : 0) +
+			   numPathsStartingAtNodeWithSumHelper(sum, node.left, currentSum ) + 
+			   numPathsStartingAtNodeWithSumHelper(sum, node.right, currentSum );
+	}
+		
+	public ArrayList<LinkedList<Integer>> bstSequence() {
+		return bstSequence(root);
+	}
+	
+	public ArrayList<LinkedList<Integer>> bstSequence(Node node) {
+		ArrayList<LinkedList<Integer>> result = new ArrayList<LinkedList<Integer>>();
+		
+		if (node == null) {
+			result.add(new LinkedList<Integer>());
+			return result;
+		}
+		
+		LinkedList<Integer> prefix = new LinkedList<Integer>();
+		prefix.add(node.data);
+		
+		ArrayList<LinkedList<Integer>> leftSeq = bstSequence(node.left);
+		ArrayList<LinkedList<Integer>> rightSeq = bstSequence(node.right);
+		
+		for (LinkedList<Integer> left : leftSeq) {
+			for (LinkedList<Integer> right: rightSeq) {
+				ArrayList<LinkedList<Integer>> woven = new ArrayList<LinkedList<Integer>>();
+				weave(left, right, prefix, woven);
+				result.addAll(woven);
+			}
+		}
+		return result;
+	}
+	
+	private void weave(
+		LinkedList<Integer> a,
+		LinkedList<Integer> b,
+		LinkedList<Integer> pre,
+		ArrayList<LinkedList<Integer>> results)
+	{
+		if (a.size() == 0 || b.size() == 0) {
+			LinkedList<Integer> result = (LinkedList<Integer>) pre.clone();
+			result.addAll(a);
+			result.addAll(b);
+			results.add(result);
+			return;
+		}
+		
+		// Evaluate using first item from a
+		Integer headFirst = a.removeFirst();
+		pre.addLast(headFirst);
+		weave(a, b, pre, results);
+		pre.removeLast();
+		a.addFirst(headFirst);
+		
+		// Evaluate using first item from b
+		Integer headSecond = b.removeFirst();
+		pre.addLast(headSecond);
+		weave(a, b, pre, results);
+		pre.removeLast();
+		b.addFirst(headSecond);
 	}
 	
 	protected class Node {

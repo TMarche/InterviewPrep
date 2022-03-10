@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -25,23 +26,56 @@ class BinaryTreeTest {
 	
 	List<Integer> preOrder5;
 	List<Integer> inOrder5;
-
+	
+	List<Integer> preOrder6;
+	List<Integer> inOrder6;
+	
+	List<Integer> preOrder7;
+	List<Integer> inOrder7;
+	
+	List<Integer> preOrder8;
+	List<Integer> inOrder8;
+	
+	List<Integer> preOrder9;
+	List<Integer> inOrder9;
+	
 	@BeforeEach
 	void setUp() throws Exception {
+		// Valid BST
 		preOrder = new ArrayList<Integer>(Arrays.asList(new Integer[] {10, 5, 2, 7, 15, 12, 16}));
 		inOrder = new ArrayList<Integer>(Arrays.asList(new Integer[] {2, 5, 7, 10, 12, 15, 16}));
 		
+		// Invalid BST
 		preOrder2 = new ArrayList<Integer>(Arrays.asList(new Integer[] {1, 2, 4, 5, 3, 6}));
 		inOrder2 = new ArrayList<Integer>(Arrays.asList(new Integer[] {4, 2, 5, 1, 6, 3}));
 		
+		// Valid BST
 		preOrder3 = new ArrayList<Integer>(Arrays.asList(new Integer[] {0, -1, -2, -3}));
 		inOrder3 = new ArrayList<Integer>(Arrays.asList(new Integer[] {-3, -2, -1, 0}));
 		
+		// Valid BST
 		preOrder4 = new ArrayList<Integer>(Arrays.asList(new Integer[] {0, 1, 2, 3}));
 		inOrder4 = new ArrayList<Integer>(Arrays.asList(new Integer[] {0, 1, 2, 3}));
 		
+		// Invalid BST
 		preOrder5 = new ArrayList<Integer>(Arrays.asList(new Integer[] {2, 3, 4}));
 		inOrder5 = new ArrayList<Integer>(Arrays.asList(new Integer[] {3, 2, 4}));
+		
+		// Valid BST
+		preOrder6 = new ArrayList<Integer>(Arrays.asList(new Integer[] {2, 1, 3}));
+		inOrder6 = new ArrayList<Integer>(Arrays.asList(new Integer[] {1, 2, 3}));
+		
+		// Invalid BST
+		preOrder7 = new ArrayList<Integer>(Arrays.asList(new Integer[] {1, 2, 2}));
+		inOrder7 = new ArrayList<Integer>(Arrays.asList(new Integer[] {2, 1, 2}));
+		
+		// Invalid BST
+		preOrder8 = new ArrayList<Integer>(Arrays.asList(new Integer[] {1, 2, -2, -3, 4, -4, -5}));
+		inOrder8 = new ArrayList<Integer>(Arrays.asList(new Integer[] {-2, 2, -3, 1, -4, 4, -5}));
+		
+		// Invalid BST
+		preOrder9 = new ArrayList<Integer>(Arrays.asList(new Integer[] {0, 1, -1}));
+		inOrder9 = new ArrayList<Integer>(Arrays.asList(new Integer[] {-1, 1, 0}));		
 	}
 
 	@Test
@@ -98,6 +132,61 @@ class BinaryTreeTest {
 		assertFalse(bt5.isValidBST());
 		BinaryTree btNull = new BinaryTree();
 		assertTrue(btNull.isValidBST());
+	}
+	
+	private void printBSTSequences(ArrayList<LinkedList<Integer>> sequences) {
+		for (LinkedList<Integer> list : sequences) {
+			StringBuilder resultBuilder = new StringBuilder();
+			for (Integer i : list) {
+				resultBuilder.append(String.format("%d ", i));
+			}
+			System.out.println(resultBuilder.toString().strip());
+		}
+	}
+	
+	@Test
+	void testBSTSequence() {
+		BinaryTree bt = new BinaryTree(preOrder, inOrder);
+		assertTrue(bt.isValidBST());
+		ArrayList<LinkedList<Integer>> result = bt.bstSequence();
+		printBSTSequences(result);
+		
+		BinaryTree bt6 = new BinaryTree(preOrder6, inOrder6);
+		assertTrue(bt.isValidBST());
+		ArrayList<LinkedList<Integer>> result6 = bt6.bstSequence();
+		printBSTSequences(result6);
+	}
+	
+	@Test
+	void testNumPathsWithSum() {
+		BinaryTree b7 = new BinaryTree(preOrder7, inOrder7);
+		assertEquals(0, b7.numPathsWithSum(0));
+		assertEquals(1, b7.numPathsWithSum(1));
+		assertEquals(2, b7.numPathsWithSum(2));
+		assertEquals(2, b7.numPathsWithSum(3));
+		assertEquals(0, b7.numPathsWithSum(4));
+		
+		BinaryTree b8 = new BinaryTree(preOrder8, inOrder8);
+		assertEquals(0, b8.numPathsWithSum(-6));
+		assertEquals(1, b8.numPathsWithSum(-5));
+		assertEquals(1, b8.numPathsWithSum(-4));
+		assertEquals(1, b8.numPathsWithSum(-3));
+		assertEquals(1, b8.numPathsWithSum(-2));
+		assertEquals(2, b8.numPathsWithSum(-1));
+		assertEquals(4, b8.numPathsWithSum(0));
+		assertEquals(3, b8.numPathsWithSum(1));
+		assertEquals(1, b8.numPathsWithSum(2));
+		assertEquals(1, b8.numPathsWithSum(3));
+		assertEquals(1, b8.numPathsWithSum(4));
+		assertEquals(1, b8.numPathsWithSum(5));
+		assertEquals(0, b8.numPathsWithSum(6));
+		
+		BinaryTree b9 = new BinaryTree(preOrder9, inOrder9);
+		assertEquals(0, b9.numPathsWithSum(-2));
+		assertEquals(1, b9.numPathsWithSum(-1));
+		assertEquals(3, b9.numPathsWithSum(0));
+		assertEquals(2, b9.numPathsWithSum(1));
+		assertEquals(0, b9.numPathsWithSum(2));
 	}
 
 }
